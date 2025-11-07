@@ -1,20 +1,21 @@
 import React, { useState, useRef } from 'react'
-import { Star, Circle, Heart, Apple, Fish } from 'lucide-react'
+import { Star, Circle, Heart, Apple, Fish,Square } from 'lucide-react'
 import confetti from 'canvas-confetti'
 
 export default function App() {
   const [currentNumber, setCurrentNumber] = useState(1)
   const [clickedCount, setClickedCount] = useState(0)
   const [celebrating, setCelebrating] = useState(false)
-  const [clickedItems, setClickedItems] = useState([])
-  const audioContextRef = useRef(null)
+  const [clickedItems, setClickedItems] = useState<number[]>([])
+  const audioContextRef = useRef<AudioContext | null>(null)
 
   const shapes = [
     { icon: Star, color: 'text-yellow-400', name: 'star' },
     { icon: Heart, color: 'text-red-400', name: 'heart' },
     { icon: Circle, color: 'text-blue-400', name: 'circle' },
     { icon: Apple, color: 'text-green-400', name: 'apple' },
-    { icon: Fish, color: 'text-purple-400', name: 'fish' }
+    { icon: Fish, color: 'text-purple-400', name: 'fish' },
+    {icon: Square,color: 'text-orange-400', name:'square'}
   ]
 
   const currentShape = shapes[currentNumber - 1]
@@ -27,9 +28,10 @@ export default function App() {
     }
   }
 
-  const playSound = (freq:any, dur: any= 0.1) => {
+  const playSound = (freq: number, dur: number = 0.1) => {
     initAudio()
     const ctx = audioContextRef.current
+    if (!ctx) return
     const o = ctx.createOscillator()
     const g = ctx.createGain()
     o.connect(g)
@@ -48,7 +50,7 @@ export default function App() {
     confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1 } })
   }
 
-  const handleClick = (i) => {
+  const handleClick = (i:any) => {
     if (clickedItems.includes(i)) return
     initAudio()
     playSound(400 + clickedCount * 150, 0.15)
@@ -116,12 +118,14 @@ export default function App() {
                   : 'bg-gray-100 shadow-2xl hover:shadow-xl'
                 }`}
             >
-              <ShapeIcon className={`${currentShape.color} drop-shadow-2xl`} fill="currentColor" />
-              {clickedItems.includes(i) && 'Check'}
+              <ShapeIcon
+              size={180} 
+              className={`${currentShape.color} drop-shadow-2xl`} fill="currentColor" />
+              {clickedItems.includes(i) && ''}
             </button>
           ))}
         </div>
-
+            {/* Progress Dots */}
         <div className="flex justify-center gap-4">
           {[1,2,3,4,5].map(n => (
             <div key={n} className={`w-12 h-12 rounded-full transition-all
