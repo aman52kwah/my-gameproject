@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { Star, Circle, Heart, Apple, Fish,Square } from 'lucide-react'
 import confetti from 'canvas-confetti'
 
